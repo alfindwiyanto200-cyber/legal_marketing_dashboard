@@ -35,11 +35,19 @@ npm run dev                 # starts API on http://localhost:3000
 | `DB_NAME`       | `legal_marketing_dashboard` | created by `npm run db:init`                    |
 | `CORS_ORIGIN`   | `http://localhost:5173`     | frontend dev origin                            |
 | `MONTHLY_TARGET`| `100000000`                 | monthly revenue target for "Pencapaian Target" |
+| `JWT_SECRET`    | *(required)*                | signing secret — set a long random value       |
+| `JWT_EXPIRES_IN`| `7d`                        | token lifetime                                 |
+| `BCRYPT_ROUNDS` | `12`                        | password hashing cost                          |
+
+> Generate a strong secret: `node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"`
 
 ### API endpoints
 
 | Method | Path                        | Purpose                              |
 |--------|-----------------------------|--------------------------------------|
+| POST   | `/api/auth/register`        | create account → `{ token, user }`   |
+| POST   | `/api/auth/login`           | login → `{ token, user }`            |
+| GET    | `/api/auth/me`              | current user (needs token)           |
 | GET    | `/api/projects`             | list projects (newest first)         |
 | POST   | `/api/projects`             | create (server sets stages + status) |
 | PATCH  | `/api/projects/:id/status`  | move kanban column                   |
@@ -59,6 +67,17 @@ npm run dev                 # starts SPA on http://localhost:5173
 ```
 
 API base URL is set in `fe/.env` (`VITE_API_URL=http://localhost:3000/api`).
+
+## Authentication & security
+
+- Register/login with username + password. Passwords are hashed with **bcrypt**; the API
+  issues a **JWT** (Bearer token) stored in the browser's `localStorage`.
+- All `/api/projects`, `/api/transactions`, and `/api/dashboard` routes **require a valid
+  token**; unauthenticated requests get `401`. The frontend router guard redirects to
+  `/login`, and a `401` from the API auto-logs-out and returns to `/login`.
+- Auth endpoints are **rate-limited** (30 requests / 15 min per IP) to slow brute-force.
+- Login returns a single generic error for both unknown user and wrong password.
+- First run: open the app → **Register** an account → you're taken into the dashboard.
 
 ## Notes
 
