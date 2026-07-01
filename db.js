@@ -1,5 +1,5 @@
 import { db } from './firebase-config.js';
-import { collection, addDoc, getDocs, updateDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { collection, addDoc, updateDoc, doc, deleteDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const projectsCol = collection(db, 'projects');
 
@@ -47,6 +47,17 @@ export const updateProjectStages = async (projectId, newStages) => {
         await updateDoc(projectRef, { stages: newStages });
     } catch (e) {
         console.error("Error updating stages: ", e);
+    }
+};
+
+// Fungsi untuk HAPUS project
+export const deleteProject = async (projectId) => {
+    try {
+        const projectRef = doc(db, 'projects', projectId);
+        await deleteDoc(projectRef);
+    } catch (e) {
+        console.error("Error deleting document: ", e);
+        throw e;
     }
 };
 

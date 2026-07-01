@@ -124,7 +124,7 @@
   </div>
   <script src="script.js"></script>
   <script type="module">
-    import { listenToProjects, updateProjectStatus, updateProjectStages } from './db.js';
+    import { listenToProjects, updateProjectStatus, updateProjectStages, deleteProject } from './db.js';
 
     document.addEventListener('DOMContentLoaded', () => {
       const statusColors = {
@@ -223,7 +223,13 @@
               else badgesHtml += '<span class="badge" style="background: rgba(16, 185, 129, 0.1); color: #10B981;">Paid</span>';
 
               card.innerHTML = `
-                 <div class="card-badges">${badgesHtml}</div>
+                 <div class="card-header-row" style="display:flex; justify-content:space-between; align-items:flex-start;">
+                   <div class="card-badges">${badgesHtml}</div>
+                   <button class="btn-delete-card" data-id="${project.id}" title="Hapus Project" style="background:none;border:none;cursor:pointer;color:#ef4444;font-size:1rem;padding:2px 4px;border-radius:4px;opacity:0.6;transition:opacity 0.2s;"
+                     onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6">
+                     <i class="ph ph-trash"></i>
+                   </button>
+                 </div>
                  <h4>${project.picName} <br><span style="font-size:0.75rem; color:var(--text-muted); font-weight:400;">${project.companyName || '-'}</span></h4>
                  <div class="client-info">Source: ${project.source || '-'}</div>
                  <div class="stages-container">${generateStagesHtml(project.stages, statusColor, project.id)}</div>
@@ -281,19 +287,32 @@
       });
 
       document.addEventListener('click', async (e) => {
+          // Tambah Progres
           const btnAdd = e.target.closest('.btn-add-progress');
           if (btnAdd) {
               const card = btnAdd.closest('.kanban-card');
               const projectId = card.dataset.id;
-              
-              const progressName = prompt("Nama tahapan progres baru:", "Tahap Baru");
+              const progressName = prompt('Nama tahapan progres baru:', 'Tahap Baru');
               if (!progressName) return;
-
               const project = projectsData.find(p => p.id === projectId);
               if (project) {
                   const currentStages = project.stages || [];
                   currentStages.push({ name: progressName, progress: 0 });
                   await updateProjectStages(projectId, currentStages);
+              }
+          }
+
+          // Hapus Project
+          const btnDelete = e.target.closest('.btn-delete-card');
+          if (btnDelete) {
+              const projectId = btnDelete.dataset.id;
+              const confirmed = confirm('⚠️ Yakin ingin menghapus project ini? Data tidak bisa dikembalikan.');
+              if (confirmed) {
+                  try {
+                      await deleteProject(projectId);
+                  } catch (err) {
+                      alert('Gagal menghapus: ' + err.message);
+                  }
               }
           }
       });

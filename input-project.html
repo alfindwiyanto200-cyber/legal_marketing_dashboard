@@ -140,6 +140,48 @@
     </main>
   </div>
   
-  <script type="module" src="script.js"></script>
+  <script src="script.js"></script>
+  <script type="module">
+    import { saveProject, getStageTemplate } from './db.js';
+
+    const form = document.getElementById('projectForm');
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="ph ph-spinner-gap"></i> Menyimpan...';
+        submitBtn.disabled = true;
+
+        const serviceType = document.getElementById('serviceType').value;
+
+        const projectData = {
+          picName:       document.getElementById('picName').value,
+          picPhone:      document.getElementById('picPhone').value,
+          companyName:   document.getElementById('companyName').value,
+          businessField: document.getElementById('businessField').value,
+          service:       serviceType,
+          source:        document.getElementById('trafficSource').value,
+          paymentStatus: document.getElementById('paymentStatus').value,
+          deadline:      document.getElementById('deadline').value,
+          notes:         document.getElementById('notes').value,
+          stages:        getStageTemplate(serviceType)
+        };
+
+        try {
+          await saveProject(projectData);
+          alert('✅ Project berhasil disimpan ke database!');
+          form.reset();
+        } catch (err) {
+          console.error(err);
+          alert('❌ Gagal menyimpan: ' + err.message);
+        } finally {
+          submitBtn.innerHTML = originalText;
+          submitBtn.disabled = false;
+        }
+      });
+    }
+  </script>
 </body>
 </html>

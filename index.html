@@ -224,6 +224,20 @@
       </section>
     </main>
   </div>
-  <script type="module" src="script.js"></script>
+  <script src="script.js"></script>
+  <script type="module">
+    import { listenToProjects } from './db.js';
+
+    listenToProjects((projects) => {
+      // Update total project count
+      const active = projects.filter(p => p.status !== 'done').length;
+      const totalEl = document.getElementById('total-projects');
+      if (totalEl) totalEl.innerHTML = `${active} <span style="font-size: 1rem; color: #8E8E93;">Aktif</span>`;
+
+      // Update kanban badge
+      const badge = document.getElementById('kanban-badge');
+      if (badge) badge.textContent = projects.length;
+    });
+  </script>
 </body>
 </html>
