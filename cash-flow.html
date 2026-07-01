@@ -29,7 +29,7 @@
         <li class="nav-item">
           <a href="kanban.html" class="nav-link">
             <i class="ph ph-kanban"></i> Kanban Board
-            <span class="badge">6</span>
+            <span class="badge" id="kanban-badge">0</span>
           </a>
         </li>
         <li class="nav-item">
@@ -131,42 +131,12 @@
                     <th style="text-align: right;">Saldo</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td style="font-size: 0.85rem;">01 Ags 2023</td>
-                    <td><span style="font-family: monospace; font-size: 0.8rem; background: #eee; padding: 2px 6px; border-radius: 4px;">TRX-001</span></td>
-                    <td>Pelunasan Web Toko Kopi Senja</td>
-                    <td>Penjualan</td>
-                    <td style="text-align: right; color: #10B981; font-weight: 500;">Rp 5.000.000</td>
-                    <td style="text-align: right;">-</td>
-                    <td style="text-align: right; font-weight: 600;">Rp 45.000.000</td>
-                  </tr>
-                  <tr>
-                    <td style="font-size: 0.85rem;">03 Ags 2023</td>
-                    <td><span style="font-family: monospace; font-size: 0.8rem; background: #eee; padding: 2px 6px; border-radius: 4px;">TRX-002</span></td>
-                    <td>Topup Saldo Meta Ads</td>
-                    <td>Biaya Iklan</td>
-                    <td style="text-align: right;">-</td>
-                    <td style="text-align: right; color: #EF4444; font-weight: 500;">Rp 2.000.000</td>
-                    <td style="text-align: right; font-weight: 600;">Rp 43.000.000</td>
-                  </tr>
-                  <tr>
-                    <td style="font-size: 0.85rem;">05 Ags 2023</td>
-                    <td><span style="font-family: monospace; font-size: 0.8rem; background: #eee; padding: 2px 6px; border-radius: 4px;">TRX-003</span></td>
-                    <td>DP Pembuatan CV Rasa Nusantara</td>
-                    <td>Penjualan</td>
-                    <td style="text-align: right; color: #10B981; font-weight: 500;">Rp 3.500.000</td>
-                    <td style="text-align: right;">-</td>
-                    <td style="text-align: right; font-weight: 600;">Rp 46.500.000</td>
-                  </tr>
-                  <tr>
-                    <td style="font-size: 0.85rem;">05 Ags 2023</td>
-                    <td><span style="font-family: monospace; font-size: 0.8rem; background: #eee; padding: 2px 6px; border-radius: 4px;">TRX-004</span></td>
-                    <td>Biaya Notaris CV Rasa Nusantara</td>
-                    <td>Vendor</td>
-                    <td style="text-align: right;">-</td>
-                    <td style="text-align: right; color: #EF4444; font-weight: 500;">Rp 1.500.000</td>
-                    <td style="text-align: right; font-weight: 600;">Rp 45.000.000</td>
+                <tbody id="cashflowTableBody">
+                  <tr id="empty-row">
+                    <td colspan="7" style="text-align:center; padding:30px; color:var(--text-muted);">
+                      <i class="ph ph-receipt" style="font-size:2rem; display:block; margin-bottom:8px;"></i>
+                      Belum ada transaksi. Silakan input transaksi pertama Anda.
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -177,5 +147,13 @@
     </main>
   </div>
   <script src="script.js"></script>
+  <script type="module">
+    import { listenToProjects } from './db.js';
+    // Update badge kanban dari Firebase
+    listenToProjects((projects) => {
+      const badge = document.getElementById('kanban-badge');
+      if (badge) badge.textContent = projects.length;
+    });
+  </script>
 </body>
 </html>
