@@ -77,7 +77,7 @@
             <button class="card-action"><i class="ph ph-arrow-up-right"></i></button>
           </div>
           <div>
-            <div class="card-value">Rp 150.5M</div>
+            <div class="card-value" id="total-omset">Rp -</div>
             <div class="card-label">Omset Bulan Ini</div>
           </div>
         </div>
@@ -88,9 +88,9 @@
             <button class="card-action"><i class="ph ph-arrow-up-right"></i></button>
           </div>
           <div>
-            <div class="card-value">85%</div>
+            <div class="card-value" id="pencapaian-target">-%</div>
             <div class="card-label">Pencapaian Target</div>
-            <div class="trend up"><i class="ph ph-trend-up"></i> +12% Growth</div>
+            <div class="trend up" id="trend-growth" style="visibility:hidden;"><i class="ph ph-trend-up"></i> -</div>
           </div>
         </div>
 
@@ -111,7 +111,7 @@
             <button class="card-action"><i class="ph ph-arrow-up-right"></i></button>
           </div>
           <div>
-            <div class="card-value">Rp 45.2M</div>
+            <div class="card-value" id="total-piutang">Rp -</div>
             <div class="card-label">Total Piutang Client</div>
           </div>
         </div>
@@ -132,13 +132,13 @@
           <div style="display: flex; gap: 40px;">
              <div>
                <div style="font-size: 0.85rem; color: var(--text-muted);">Pemasukan</div>
-               <div style="font-size: 1.5rem; font-weight: 600;">Rp 150.5M</div>
-               <div class="trend up"><i class="ph ph-trend-up"></i> +5% vs bln lalu</div>
+               <div style="font-size: 1.5rem; font-weight: 600;" id="dash-pemasukan">Rp -</div>
+               <div class="trend up" style="visibility:hidden;"><i class="ph ph-trend-up"></i> -</div>
              </div>
              <div>
                <div style="font-size: 0.85rem; color: var(--text-muted);">Pengeluaran</div>
-               <div style="font-size: 1.5rem; font-weight: 600;">Rp 90.2M</div>
-               <div class="trend down"><i class="ph ph-trend-down"></i> -2% vs bln lalu</div>
+               <div style="font-size: 1.5rem; font-weight: 600;" id="dash-pengeluaran">Rp -</div>
+               <div class="trend down" style="visibility:hidden;"><i class="ph ph-trend-down"></i> -</div>
              </div>
           </div>
 
