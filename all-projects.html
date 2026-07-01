@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semua Projek - Legal & Digital Marketing</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="image/logoResmiin1.svg" alt="Logo" style="height: 48px; width: auto; max-width: 100%;">
+      </div>
+      
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link">
+            <i class="ph ph-house"></i> Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="input-project.html" class="nav-link">
+            <i class="ph ph-plus-circle"></i> Input Project
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="kanban.html" class="nav-link">
+            <i class="ph ph-kanban"></i> Kanban Board
+            <span class="badge">6</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="all-projects.html" class="nav-link active">
+            <i class="ph ph-folders"></i> All Projects
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="cash-flow.html" class="nav-link">
+            <i class="ph ph-wallet"></i> Cash Flow
+          </a>
+        </li>
+      </ul>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="header">
+        <div class="header-title">
+          <h1>Database Projek</h1>
+          <p>Seluruh riwayat dan status projek aktif maupun selesai</p>
+        </div>
+        <div class="header-actions">
+           <div style="position: relative;">
+             <i class="ph ph-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+             <input type="text" class="form-control" placeholder="Cari nama klien / no HP..." style="padding-left: 36px; width: 250px;">
+           </div>
+           <button class="btn-primary" style="padding: 10px 16px;"><i class="ph ph-funnel"></i> Filter</button>
+        </div>
+      </header>
+
+      <section class="data-table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID Projek</th>
+              <th>Nama Klien / Perusahaan</th>
+              <th>Layanan</th>
+              <th>Sumber</th>
+              <th>Tenggat Waktu</th>
+              <th>Status Pembayaran</th>
+              <th>Status Pengerjaan</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+              <td>8 Ags 2023 <i class="ph ph-warning-circle text-red" title="Urgent"></i></td>
+              <td><span class="tag paid">Paid</span></td>
+              <td><span class="status-badge status-process">On Process</span></td>
+              <td><button class="icon-btn" style="width: 32px; height: 32px;"><i class="ph ph-dots-three"></i></button></td>
+            </tr>
+            <tr>
+              <td><span style="font-family: monospace; color: var(--text-muted);">#PRJ-004</span></td>
+              <td>
+                <div style="font-weight: 600;">Toko Kopi Senja</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">08133445566</div>
+              </td>
+              <td>Pembuatan Website</td>
+              <td>Google Search</td>
+              <td>1 Ags 2023</td>
+              <td><span class="tag paid">Paid</span></td>
+              <td><span class="status-badge status-done">Done</span></td>
+              <td><button class="icon-btn" style="width: 32px; height: 32px;"><i class="ph ph-dots-three"></i></button></td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding: 0 10px;">
+           <span style="color: var(--text-muted); font-size: 0.9rem;">Menampilkan 4 dari 42 projek</span>
+           <div style="display: flex; gap: 8px;">
+             <button class="btn-outline" style="padding: 6px 12px; font-size: 0.9rem;">Sebelumnya</button>
+             <button class="btn-primary" style="padding: 6px 12px; font-size: 0.9rem;">Selanjutnya</button>
+           </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

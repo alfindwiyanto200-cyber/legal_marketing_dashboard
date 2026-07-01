@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kanban Board - Legal & Digital Marketing</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="image/logoResmiin1.svg" alt="Logo" style="height: 48px; width: auto; max-width: 100%;">
+      </div>
+      
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link">
+            <i class="ph ph-house"></i> Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="input-project.html" class="nav-link">
+            <i class="ph ph-plus-circle"></i> Input Project
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="kanban.html" class="nav-link active">
+            <i class="ph ph-kanban"></i> Kanban Board
+            <span class="badge">6</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="all-projects.html" class="nav-link">
+            <i class="ph ph-folders"></i> All Projects
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="cash-flow.html" class="nav-link">
+            <i class="ph ph-wallet"></i> Cash Flow
+          </a>
+        </li>
+      </ul>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" style="padding-right: 20px;"> <!-- Adjust padding for scroll -->
+      <header class="header">
+        <div class="header-title">
+          <h1>Project Tracking</h1>
+          <p>Kanban Board & Gantt Timeline</p>
+        </div>
+        <div class="header-actions">
+           <!-- View Toggle (Visual representation) -->
+           <div style="background: white; padding: 4px; border-radius: 20px; border: var(--glass-border); display: flex;">
+              <button class="btn-outline" style="border: none; background: var(--text-main); color: white; border-radius: 16px; padding: 8px 16px;">Kanban</button>
+              <button class="btn-outline" style="border: none; padding: 8px 16px;">Gantt</button>
+           </div>
+        </div>
+      </header>
+
+      <section class="kanban-board">
+        
+        <!-- Column: Leads -->
+          <!-- Column 1: Leads -->
+          <div class="kanban-column">
+            <div class="column-header">
+              <h3><i class="ph ph-funnel" style="color: var(--status-leads);"></i> Leads</h3>
+              <span class="count-badge">0</span>
+            </div>
+            <div class="kanban-cards"></div>
+          </div>
+
+          <!-- Column 2: Drafting -->
+          <div class="kanban-column">
+            <div class="column-header">
+              <h3><i class="ph ph-file-text" style="color: var(--status-drafting);"></i> Drafting</h3>
+              <span class="count-badge">0</span>
+            </div>
+            <div class="kanban-cards"></div>
+          </div>
+
+          <!-- Column 3: On Process -->
+          <div class="kanban-column">
+            <div class="column-header">
+              <h3><i class="ph ph-spinner-gap ph-spin" style="color: var(--status-process);"></i> On Process</h3>
+              <span class="count-badge">0</span>
+            </div>
+            <div class="kanban-cards"></div>
+          </div>
+
+          <!-- Column 4: On Hold -->
+          <div class="kanban-column">
+            <div class="column-header">
+              <h3><i class="ph ph-pause-circle" style="color: var(--status-hold);"></i> On Hold</h3>
+              <span class="count-badge">0</span>
+            </div>
+            <div class="kanban-cards"></div>
+          </div>
+
+          <!-- Column 5: Done -->
+          <div class="kanban-column">
+            <div class="column-header">
+              <h3><i class="ph ph-check-circle" style="color: var(--status-done);"></i> Done</h3>
+              <span class="count-badge">0</span>
+            </div>
+            <div class="kanban-cards"></div>
+          </div>
+
+          <!-- Column 6: Trouble -->
+          <div class="kanban-column">
+            <div class="column-header">
+              <h3><i class="ph ph-warning-circle" style="color: var(--status-trouble);"></i> Trouble</h3>
+              <span class="count-badge">0</span>
+            </div>
+            <div class="kanban-cards"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="script.js"></script>
+  <script type="module">
+    import { listenToProjects, updateProjectStatus, updateProjectStages } from './db.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const statusColors = {
+        'leads': 'var(--status-leads)',
+        'drafting': 'var(--status-drafting)',
+        'process': 'var(--status-process)',
+        'hold': 'var(--status-hold)',
+        'done': 'var(--status-done)',
+        'trouble': 'var(--status-trouble)'
+      };
+
+      const columns = {
+        'leads': document.querySelector('.kanban-column:nth-child(1) .kanban-cards'),
+        'drafting': document.querySelector('.kanban-column:nth-child(2) .kanban-cards'),
+        'process': document.querySelector('.kanban-column:nth-child(3) .kanban-cards'),
+        'hold': document.querySelector('.kanban-column:nth-child(4) .kanban-cards'),
+        'done': document.querySelector('.kanban-column:nth-child(5) .kanban-cards'),
+        'trouble': document.querySelector('.kanban-column:nth-child(6) .kanban-cards')
+      };
+
+      // Add drop areas to columns
+      document.querySelectorAll('.kanban-column').forEach(column => {
+          column.addEventListener('dragover', e => {
+              e.preventDefault();
+              const draggingCard = document.querySelector('.dragging');
+              if (draggingCard) {
+                  const cardsContainer = column.querySelector('.kanban-cards');
+                  if(cardsContainer) cardsContainer.appendChild(draggingCard);
+              }
+          });
+          column.addEventListener('drop', async (e) => {
+              e.preventDefault();
+              const draggingCard = document.querySelector('.dragging');
+              if (draggingCard) {
+                  const headerText = column.querySelector('h3').textContent.toLowerCase();
+                  let colStatus = 'leads';
+                  if(headerText.includes('drafting')) colStatus = 'drafting';
+                  else if(headerText.includes('process')) colStatus = 'process';
+                  else if(headerText.includes('hold')) colStatus = 'hold';
+                  else if(headerText.includes('done')) colStatus = 'done';
+                  else if(headerText.includes('trouble')) colStatus = 'trouble';
+                  
+                  const projectId = draggingCard.dataset.id;
+                  await updateProjectStatus(projectId, colStatus);
+              }
+          });
+      });
+
+      const updateSliderStyle = (slider) => {
+          const val = slider.value;
+          const color = slider.dataset.color || 'var(--primary-blue)';
+          slider.style.background = `linear-gradient(to right, ${color} 0%, ${color} ${val}%, #f0f0f0 ${val}%, #f0f0f0 100%)`;
+      };
+
+      const generateStagesHtml = (stages, statusColor, projectId) => {
+          if (!stages) return '';
+          return stages.map((stage, index) => `
+             <div class="progress-item" style="margin-top: 10px;" data-index="${index}">
+                <div class="progress-header" style="font-size: 0.75rem;">
+                  <span>${stage.name}</span>
+                  <span class="progress-text">${stage.progress || 0}%</span>
+                </div>
+                <input type="range" class="progress-slider" min="0" max="100" value="${stage.progress || 0}" data-color="${statusColor}">
+             </div>
+          `).join('');
+      };
+
+      let projectsData = [];
+
+      listenToProjects((projects) => {
+          projectsData = projects;
+          // Clear columns and counts
+          Object.values(columns).forEach(col => { if(col) col.innerHTML = ''; });
+          const counts = { leads: 0, drafting: 0, process: 0, hold: 0, done: 0, trouble: 0 };
+          
+          projects.forEach(project => {
+              const status = project.status || 'leads';
+              counts[status] = (counts[status] || 0) + 1;
+
+              const colContainer = columns[status];
+              if (!colContainer) return;
+
+              const statusColor = statusColors[status] || 'var(--primary-blue)';
+              
+              const card = document.createElement('div');
+              card.className = 'kanban-card';
+              card.draggable = true;
+              card.dataset.id = project.id;
+              
+              let badgesHtml = '';
+              if (project.service === 'legal-pt') badgesHtml += '<span class="badge" style="background: rgba(59, 130, 246, 0.1); color: #3B82F6;">Pendirian PT</span> ';
+              else if (project.service === 'legal-cv') badgesHtml += '<span class="badge" style="background: rgba(59, 130, 246, 0.1); color: #3B82F6;">Pendirian CV</span> ';
+              else if (project.service === 'legal-haki') badgesHtml += '<span class="badge" style="background: rgba(59, 130, 246, 0.1); color: #3B82F6;">HAKI</span> ';
+              
+              if (project.paymentStatus === 'unpaid') badgesHtml += '<span class="badge" style="background: rgba(245, 158, 11, 0.1); color: #F59E0B;">Unpaid</span>';
+              else badgesHtml += '<span class="badge" style="background: rgba(16, 185, 129, 0.1); color: #10B981;">Paid</span>';
+
+              card.innerHTML = `
+                 <div class="card-badges">${badgesHtml}</div>
+                 <h4>${project.picName} <br><span style="font-size:0.75rem; color:var(--text-muted); font-weight:400;">${project.companyName || '-'}</span></h4>
+                 <div class="client-info">Source: ${project.source || '-'}</div>
+                 <div class="stages-container">${generateStagesHtml(project.stages, statusColor, project.id)}</div>
+                 <button class="btn-add-progress"><i class="ph ph-plus"></i> Tambah Progres</button>
+                 <div class="card-footer">
+                   <div class="due-date"><i class="ph ph-calendar-blank"></i> ${project.deadline || '-'}</div>
+                   <div class="pic-avatar" title="PIC: ${project.picName}">${project.picName ? project.picName.charAt(0).toUpperCase() : '?'}</div>
+                 </div>
+              `;
+
+              card.addEventListener('dragstart', () => card.classList.add('dragging'));
+              card.addEventListener('dragend', () => card.classList.remove('dragging'));
+
+              colContainer.appendChild(card);
+          });
+
+          // Update counts
+          document.querySelectorAll('.kanban-column').forEach(col => {
+             const headerText = col.querySelector('h3').textContent.toLowerCase();
+             let key = 'leads';
+             if(headerText.includes('drafting')) key = 'drafting';
+             else if(headerText.includes('process')) key = 'process';
+             else if(headerText.includes('hold')) key = 'hold';
+             else if(headerText.includes('done')) key = 'done';
+             else if(headerText.includes('trouble')) key = 'trouble';
+             col.querySelector('.count-badge').textContent = counts[key] || 0;
+          });
+
+          // Initialize sliders
+          document.querySelectorAll('.progress-slider').forEach(slider => {
+              updateSliderStyle(slider);
+              
+              slider.addEventListener('input', (e) => {
+                  updateSliderStyle(e.target);
+                  const item = e.target.closest('.progress-item');
+                  if(item) {
+                      const textElement = item.querySelector('.progress-text');
+                      if(textElement) textElement.textContent = e.target.value + '%';
+                  }
+              });
+
+              slider.addEventListener('change', async (e) => {
+                  const card = e.target.closest('.kanban-card');
+                  const item = e.target.closest('.progress-item');
+                  const projectId = card.dataset.id;
+                  const stageIndex = parseInt(item.dataset.index);
+                  
+                  const project = projectsData.find(p => p.id === projectId);
+                  if (project && project.stages) {
+                      project.stages[stageIndex].progress = parseInt(e.target.value);
+                      await updateProjectStages(projectId, project.stages);
+                  }
+              });
+          });
+      });
+
+      document.addEventListener('click', async (e) => {
+          const btnAdd = e.target.closest('.btn-add-progress');
+          if (btnAdd) {
+              const card = btnAdd.closest('.kanban-card');
+              const projectId = card.dataset.id;
+              
+              const progressName = prompt("Nama tahapan progres baru:", "Tahap Baru");
+              if (!progressName) return;
+
+              const project = projectsData.find(p => p.id === projectId);
+              if (project) {
+                  const currentStages = project.stages || [];
+                  currentStages.push({ name: progressName, progress: 0 });
+                  await updateProjectStages(projectId, currentStages);
+              }
+          }
+      });
+    });
+  </script>
+</body>
+</html>

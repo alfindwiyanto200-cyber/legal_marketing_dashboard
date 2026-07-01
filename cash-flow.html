@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cash Flow - Legal & Digital Marketing</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="image/logoResmiin1.svg" alt="Logo" style="height: 48px; width: auto; max-width: 100%;">
+      </div>
+      
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link">
+            <i class="ph ph-house"></i> Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="input-project.html" class="nav-link">
+            <i class="ph ph-plus-circle"></i> Input Project
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="kanban.html" class="nav-link">
+            <i class="ph ph-kanban"></i> Kanban Board
+            <span class="badge">6</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="all-projects.html" class="nav-link">
+            <i class="ph ph-folders"></i> All Projects
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="cash-flow.html" class="nav-link active">
+            <i class="ph ph-wallet"></i> Cash Flow
+          </a>
+        </li>
+      </ul>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="header">
+        <div class="header-title">
+          <h1>Arus Kas (Cash Flow)</h1>
+          <p>Catat dan pantau transaksi pemasukan serta pengeluaran</p>
+        </div>
+      </header>
+
+      <div class="dashboard-grid" style="grid-template-columns: 1fr 2fr; align-items: start;">
+        
+        <!-- Form Input Transaksi -->
+        <section class="chart-card">
+           <h3 style="margin-bottom: 20px; font-weight: 600; font-size: 1.1rem; border-bottom: 1px solid #eee; padding-bottom: 10px;">Input Transaksi Baru</h3>
+           <form id="cashflowForm">
+             <div class="form-group">
+                <label class="form-label">Tanggal Transaksi</label>
+                <input type="date" class="form-control" required>
+             </div>
+             
+             <div class="form-row">
+               <div class="form-group">
+                  <label class="form-label">Jenis Transaksi</label>
+                  <select class="form-control" id="trxType" required>
+                    <option value="in">Pemasukan (In)</option>
+                    <option value="out">Pengeluaran (Out)</option>
+                  </select>
+               </div>
+               <div class="form-group">
+                  <label class="form-label">Nominal (Rp)</label>
+                  <input type="number" class="form-control" placeholder="0" required>
+               </div>
+             </div>
+
+             <div class="form-group">
+                <label class="form-label">Kategori</label>
+                <select class="form-control">
+                  <option value="sales">Penjualan Layanan</option>
+                  <option value="ads">Biaya Iklan (Ads)</option>
+                  <option value="salary">Gaji Karyawan</option>
+                  <option value="operational">Operasional Kantor</option>
+                  <option value="vendor">Pembayaran Vendor/Notaris</option>
+                  <option value="other">Lain-lain</option>
+                </select>
+             </div>
+
+             <div class="form-group">
+                <label class="form-label">Deskripsi / Keterangan</label>
+                <input type="text" class="form-control" placeholder="Cth: Pelunasan PT Maju Jaya" required>
+             </div>
+
+             <div class="form-group">
+                <label class="form-label">Bukti Transaksi (Opsional)</label>
+                <input type="file" class="form-control" style="padding: 10px;">
+             </div>
+
+             <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 10px;">
+                <i class="ph ph-plus"></i> Tambah Transaksi
+             </button>
+           </form>
+        </section>
+
+        <!-- Tabel Transaksi -->
+        <section class="data-table-container">
+           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <h3 style="font-weight: 600; font-size: 1.1rem;">Riwayat Mutasi & Buku Kas</h3>
+              <div style="display: flex; gap: 10px;">
+                 <input type="month" class="form-control" style="padding: 6px 12px; width: auto;">
+                 <button class="btn-outline" style="padding: 8px 12px;"><i class="ph ph-export"></i> Export CSV</button>
+              </div>
+           </div>
+
+           <div style="overflow-x: auto;">
+              <table style="min-width: 600px;">
+                <thead>
+                  <tr>
+                    <th>Tanggal</th>
+                    <th>Kode</th>
+                    <th>Deskripsi</th>
+                    <th>Kategori</th>
+                    <th style="text-align: right;">Masuk (In)</th>
+                    <th style="text-align: right;">Keluar (Out)</th>
+                    <th style="text-align: right;">Saldo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="font-size: 0.85rem;">01 Ags 2023</td>
+                    <td><span style="font-family: monospace; font-size: 0.8rem; background: #eee; padding: 2px 6px; border-radius: 4px;">TRX-001</span></td>
+                    <td>Pelunasan Web Toko Kopi Senja</td>
+                    <td>Penjualan</td>
+                    <td style="text-align: right; color: #10B981; font-weight: 500;">Rp 5.000.000</td>
+                    <td style="text-align: right;">-</td>
+                    <td style="text-align: right; font-weight: 600;">Rp 45.000.000</td>
+                  </tr>
+                  <tr>
+                    <td style="font-size: 0.85rem;">03 Ags 2023</td>
+                    <td><span style="font-family: monospace; font-size: 0.8rem; background: #eee; padding: 2px 6px; border-radius: 4px;">TRX-002</span></td>
+                    <td>Topup Saldo Meta Ads</td>
+                    <td>Biaya Iklan</td>
+                    <td style="text-align: right;">-</td>
+                    <td style="text-align: right; color: #EF4444; font-weight: 500;">Rp 2.000.000</td>
+                    <td style="text-align: right; font-weight: 600;">Rp 43.000.000</td>
+                  </tr>
+                  <tr>
+                    <td style="font-size: 0.85rem;">05 Ags 2023</td>
+                    <td><span style="font-family: monospace; font-size: 0.8rem; background: #eee; padding: 2px 6px; border-radius: 4px;">TRX-003</span></td>
+                    <td>DP Pembuatan CV Rasa Nusantara</td>
+                    <td>Penjualan</td>
+                    <td style="text-align: right; color: #10B981; font-weight: 500;">Rp 3.500.000</td>
+                    <td style="text-align: right;">-</td>
+                    <td style="text-align: right; font-weight: 600;">Rp 46.500.000</td>
+                  </tr>
+                  <tr>
+                    <td style="font-size: 0.85rem;">05 Ags 2023</td>
+                    <td><span style="font-family: monospace; font-size: 0.8rem; background: #eee; padding: 2px 6px; border-radius: 4px;">TRX-004</span></td>
+                    <td>Biaya Notaris CV Rasa Nusantara</td>
+                    <td>Vendor</td>
+                    <td style="text-align: right;">-</td>
+                    <td style="text-align: right; color: #EF4444; font-weight: 500;">Rp 1.500.000</td>
+                    <td style="text-align: right; font-weight: 600;">Rp 45.000.000</td>
+                  </tr>
+                </tbody>
+              </table>
+           </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

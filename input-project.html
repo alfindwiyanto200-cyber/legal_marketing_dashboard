@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Input Project - Legal & Digital Marketing</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="image/logoResmiin1.svg" alt="Logo" style="height: 48px; width: auto; max-width: 100%;">
+      </div>
+      
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link">
+            <i class="ph ph-house"></i> Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="input-project.html" class="nav-link active">
+            <i class="ph ph-plus-circle"></i> Input Project
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="kanban.html" class="nav-link">
+            <i class="ph ph-kanban"></i> Kanban Board
+            <span class="badge">6</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="all-projects.html" class="nav-link">
+            <i class="ph ph-folders"></i> All Projects
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="cash-flow.html" class="nav-link">
+            <i class="ph ph-wallet"></i> Cash Flow
+          </a>
+        </li>
+      </ul>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="header">
+        <div class="header-title">
+          <h1>Input Project Baru</h1>
+          <p>Tambahkan data klien dan layanan yang diambil</p>
+        </div>
+      </header>
+
+      <section class="form-section">
+        <div class="chart-card" style="max-width: 800px;">
+          <form id="projectForm">
+            
+            <h3 style="margin-bottom: 20px; font-weight: 600; font-size: 1.1rem; border-bottom: 1px solid #eee; padding-bottom: 10px;">Informasi Klien</h3>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Nama PIC</label>
+                <input type="text" class="form-control" placeholder="Masukkan nama lengkap">
+              </div>
+              <div class="form-group">
+                <label class="form-label">No. WA / HP</label>
+                <input type="text" class="form-control" placeholder="Contoh: 08123456789">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Nama Perusahaan / Merek</label>
+                <input type="text" class="form-control" placeholder="PT / CV / Nama Usaha">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Bidang Bisnis</label>
+                <input type="text" class="form-control" placeholder="Contoh: F&B, Retail, Jasa">
+              </div>
+            </div>
+
+            <h3 style="margin: 30px 0 20px 0; font-weight: 600; font-size: 1.1rem; border-bottom: 1px solid #eee; padding-bottom: 10px;">Detail Layanan</h3>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Layanan yang Diambil</label>
+                <select class="form-control">
+                  <option value="">Pilih Layanan</option>
+                  <option value="legal-pt">Pendirian PT</option>
+                  <option value="legal-cv">Pendirian CV</option>
+                  <option value="legal-haki">Pendaftaran HAKI</option>
+                  <option value="marketing-social">Social Media Management</option>
+                  <option value="marketing-ads">Google / Meta Ads</option>
+                  <option value="marketing-web">Pembuatan Website</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Sumber Traffic</label>
+                <select class="form-control">
+                  <option value="">Pilih Sumber</option>
+                  <option value="wa">WhatsApp</option>
+                  <option value="ig">Instagram</option>
+                  <option value="web">Website</option>
+                  <option value="google">Google Search</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Status Pembayaran</label>
+                <select class="form-control">
+                  <option value="unpaid">Belum Dibayar</option>
+                  <option value="dp">DP (Down Payment)</option>
+                  <option value="paid">Lunas</option>
+                </select>
+              </div>
+               <div class="form-group">
+                <label class="form-label">Tenggat Waktu (Deadline)</label>
+                <input type="date" class="form-control">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Catatan Tambahan</label>
+              <textarea class="form-control" rows="4" placeholder="Tuliskan catatan khusus atau to-do list awal..."></textarea>
+            </div>
+
+            <div style="display: flex; gap: 16px; margin-top: 30px;">
+              <button type="submit" class="btn-primary">
+                <i class="ph ph-check-circle"></i> Simpan Project
+              </button>
+              <button type="reset" class="btn-outline">Reset Data</button>
+            </div>
+
+          </form>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="script.js"></script>
+  <script type="module">
+    import { saveProject, getStageTemplate } from './db.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('projectForm');
+      if (form) {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          
+          // Show loading state
+          const submitBtn = form.querySelector('button[type="submit"]');
+          const originalText = submitBtn.innerHTML;
+          submitBtn.innerHTML = '<i class="ph ph-spinner-gap ph-spin"></i> Menyimpan...';
+          submitBtn.disabled = true;
+
+          // Gather data
+          const serviceType = form.querySelector('select:nth-of-type(1)').value;
+          const projectData = {
+            picName: form.querySelector('input[placeholder="Masukkan nama lengkap"]').value,
+            picPhone: form.querySelector('input[placeholder="Contoh: 08123456789"]').value,
+            companyName: form.querySelector('input[placeholder="PT / CV / Nama Usaha"]').value,
+            businessField: form.querySelector('input[placeholder="Contoh: F&B, Retail, Jasa"]').value,
+            service: serviceType,
+            source: form.querySelector('select:nth-of-type(2)').value,
+            paymentStatus: form.querySelector('select:nth-of-type(3)').value,
+            deadline: form.querySelector('input[type="date"]').value,
+            notes: form.querySelector('textarea').value,
+            stages: getStageTemplate(serviceType) // Generate default stages
+          };
+
+          try {
+            await saveProject(projectData);
+            alert('Project berhasil disimpan ke Database!');
+            form.reset();
+          } catch (error) {
+            alert('Gagal menyimpan project: ' + error.message);
+          } finally {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
