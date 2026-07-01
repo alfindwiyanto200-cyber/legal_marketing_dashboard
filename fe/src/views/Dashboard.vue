@@ -1,7 +1,10 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { store } from '../store.js';
+import { auth } from '../auth.js';
 import { api } from '../services/api.js';
+
+const username = computed(() => auth.user?.username || 'User');
 
 const trafficColors = {
   wa: { color: '#D2FA15', label: 'WhatsApp' },
@@ -87,10 +90,10 @@ onMounted(async () => {
         <button class="icon-btn"><i class="ph ph-magnifying-glass"></i></button>
         <button class="icon-btn"><i class="ph ph-bell"></i></button>
         <div class="user-profile">
-          <img src="https://ui-avatars.com/api/?name=Admin+User&background=D2FA15&color=000" alt="User">
+          <img :src="`https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=D2FA15&color=000`" alt="User">
           <div class="user-info">
             <span>Welcome back</span>
-            <span>Admin User</span>
+            <span>{{ username }}</span>
           </div>
           <i class="ph ph-caret-down"></i>
         </div>
